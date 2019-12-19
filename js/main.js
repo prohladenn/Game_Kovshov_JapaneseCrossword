@@ -6,8 +6,9 @@ const level = document.getElementById('level');
 const scoreboard = document.getElementById('scoreboard');
 const name = document.getElementById('name');
 const theme = document.getElementById('theme');
-const userData = [];
 const score = getScoreTable();
+const userData = [];
+let userMatrix = [];
 let currentLevel;
 let currentComplexity;
 let currentName;
@@ -31,6 +32,8 @@ check.addEventListener("click", () => {
     if (checkResult()) {
         pushScore();
         clearTimeout(timer._timer);
+    } else {
+
     }
 });
 
@@ -50,7 +53,10 @@ function createMatrix(h, w, cell) {
             if (cell === "game_cell") {
                 htmlElement.addEventListener("click", () => {
                     if (htmlElement.classList.contains("active")) {
-                        htmlElement.classList.remove("active")
+                        if (htmlElement.classList.contains("broken")) {
+                            htmlElement.classList.remove("broken");
+                        }
+                        htmlElement.classList.remove("active");
                         userData[i][j] = 0;
                     } else {
                         htmlElement.classList.add("active");
@@ -102,6 +108,7 @@ function init(complexityLevel, level) {
         }
     }
     const b2 = createMatrix(h, currentLevel.column.length, "game_cell");
+    userMatrix = b2.matrix;
     app.append(...[a1, a2, b1, b2].map(e => e.div));
     app.style.width = `${(currentLevel.column.length + maxRow) * 22 + 4}px`;
     app.style.display = 'flex';
@@ -166,7 +173,7 @@ function pushScore() {
         arr.push(result);
     else
         score[currentComplexity][currentLevel.name] = [result];
-    localStorage.setItem('score', JSON.stringify(score))
+    localStorage.setItem('score', JSON.stringify(score));
     buildScoreTable();
 }
 
@@ -196,19 +203,21 @@ function setTheme(name) {
 }
 
 function checkResult() {
+    let ans = true;
     for (let i = 0; i < currentLevel.answer.length; i++) {
         for (let j = 0; j < currentLevel.answer[i].length; j++) {
             if (userData[i][j] !== currentLevel.answer[i][j]) {
-                return false;
+                ans = false;
+                if (userData[i][j] === 1) {
+                    userMatrix[i][j].classList.add("broken");
+                }
             }
         }
     }
-    return true;
+    return ans;
 }
 
 app.style.display = 'none';
 check.style.display = 'none';
 fill('easy');
 setTheme(localStorage.getItem('theme'));
-//init('easy', 0);
-

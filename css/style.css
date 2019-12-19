@@ -2,7 +2,7 @@ html, body {
     padding: 0;
     margin: 0;
     font-family: Roboto;
-    height:100%;
+    height: 100%;
 }
 
 body {
@@ -15,6 +15,7 @@ main {
     display: flex;
     flex-direction: row;
 }
+
 header h1 {
     margin: 0;
 }
@@ -33,9 +34,11 @@ header {
     background-size: auto 100%;
     background-position: center center;
 }
+
 body.dark header {
     background-image: url('../assets/grid-dark.png');
 }
+
 #logo {
     height: 200px;
     background-image: url('../assets/text.png');
@@ -43,9 +46,11 @@ body.dark header {
     background-position: center center;
     background-repeat: no-repeat;
 }
+
 body.dark #logo {
     background-image: url('../assets/text-dark.png');
 }
+
 h4 {
     margin: 10px 0;
 }
@@ -81,6 +86,7 @@ h4 {
     padding-bottom: 10px;
     font-weight: bold;
 }
+
 body.dark #timer {
     color: #b9b9b9;
 }
@@ -129,6 +135,11 @@ body.dark #timer {
     border: 1px solid black;
 }
 
+.game_cell.broken {
+    background-color: #c8762e;
+    border: 1px solid black;
+}
+
 .row .game_cell:first-child {
     border-left: 0;
     padding-left: 1px;
@@ -162,6 +173,7 @@ body.dark #timer {
 .block {
     border: 1px solid black;
 }
+
 select, input, .side button {
     appearance: none;
     outline: 0;
@@ -170,12 +182,14 @@ select, input, .side button {
     background: #272727;
     background-image: none;
 }
+
 /* Remove IE arrow */
 select::-ms-expand {
     display: none;
 }
+
 /* Custom Select */
-.select, input, .side button  {
+.select, input, .side button {
     position: relative;
     display: flex;
     height: 30px;
@@ -184,6 +198,7 @@ select::-ms-expand {
     overflow: hidden;
     border-radius: .25em;
 }
+
 .side button {
     margin-top: 10px;
     line-height: 2;
@@ -191,16 +206,19 @@ select::-ms-expand {
     display: block;
     color: #fff;
 }
-input  {
+
+input {
     color: #fff;
     padding: 0 .5em;
 }
+
 select {
     flex: 1;
     padding: 0 .5em;
     color: #fff;
     cursor: pointer;
 }
+
 /* Arrow */
 .select::after {
     content: '\25BC';
@@ -215,6 +233,7 @@ select {
     -o-transition: .25s all ease;
     transition: .25s all ease;
 }
+
 /* Transition */
 .select:hover::after {
     color: #f39c12;
