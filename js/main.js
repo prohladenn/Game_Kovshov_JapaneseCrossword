@@ -16,14 +16,17 @@ let currentName;
 complexity.addEventListener('change', (e) => {
     fill(e.target.value)
 });
+
 theme.addEventListener('change', (e) => {
     setTheme(e.target.value)
-})
+});
+
 document.getElementById('start').addEventListener('click', () => {
     if (!name.value)
         return alert('Введите имя');
     init(complexity.value, level.value)
 });
+
 check.addEventListener("click", () => {
     if (checkResult()) {
         pushScore();
