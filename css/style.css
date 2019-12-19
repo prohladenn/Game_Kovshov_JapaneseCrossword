@@ -1,0 +1,221 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    font-family: Roboto;
+    height:100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+}
+header h1 {
+    margin: 0;
+}
+
+body.dark main {
+    background-color: #272727;
+}
+
+body.dark #timer {
+    color: #fff;
+}
+
+header {
+    height: 200px;
+    background-image: url('../assets/grid.png');
+    background-size: auto 100%;
+    background-position: center center;
+}
+body.dark header {
+    background-image: url('../assets/grid-dark.png');
+}
+#logo {
+    height: 200px;
+    background-image: url('../assets/text.png');
+    background-size: auto 100%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+body.dark #logo {
+    background-image: url('../assets/text-dark.png');
+}
+h4 {
+    margin: 10px 0;
+}
+
+#app {
+    border: 1px solid black;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 0 auto;
+}
+
+#check {
+    outline: 0;
+    box-shadow: none;
+    border: 0 !important;
+    background: #cea44c;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: .25em;
+    margin: 10px 0;
+    cursor: pointer;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+#timer {
+    font-size: 24px;
+    padding-bottom: 10px;
+    font-weight: bold;
+}
+body.dark #timer {
+    color: #b9b9b9;
+}
+
+.side {
+    min-width: 250px;
+    min-height: 200px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: #393d3f;
+    color: #cea44c
+}
+
+.time {
+    display: inline-block;
+    float: right;
+}
+
+#content {
+    padding: 20px 40px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cell, .game_cell, .empty_cell {
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    margin: 1px;
+}
+
+.game_cell {
+    margin: 0;
+    border: 1px solid gray;
+}
+
+.game_cell:hover {
+    background-color: gray;
+}
+
+.game_cell.active {
+    background-color: black;
+    border: 1px solid black;
+}
+
+.row .game_cell:first-child {
+    border-left: 0;
+    padding-left: 1px;
+}
+
+.row .game_cell:last-child {
+    border-right: 0;
+    padding-right: 1px;
+}
+
+.row:first-child .game_cell {
+    border-top: 0;
+    padding-top: 1px;
+}
+
+.row:last-child .game_cell {
+    border-bottom: 0;
+    padding-bottom: 1px;
+}
+
+.empty_cell {
+    padding: 1px;
+    margin: 0;
+}
+
+
+.cell.mute, .empty_cell {
+    background-color: #cea44c;
+}
+
+.block {
+    border: 1px solid black;
+}
+select, input, .side button {
+    appearance: none;
+    outline: 0;
+    box-shadow: none;
+    border: 0 !important;
+    background: #272727;
+    background-image: none;
+}
+/* Remove IE arrow */
+select::-ms-expand {
+    display: none;
+}
+/* Custom Select */
+.select, input, .side button  {
+    position: relative;
+    display: flex;
+    height: 30px;
+    line-height: 3;
+    background: #272727;
+    overflow: hidden;
+    border-radius: .25em;
+}
+.side button {
+    margin-top: 10px;
+    line-height: 2;
+    text-align: center;
+    display: block;
+    color: #fff;
+}
+input  {
+    color: #fff;
+    padding: 0 .5em;
+}
+select {
+    flex: 1;
+    padding: 0 .5em;
+    color: #fff;
+    cursor: pointer;
+}
+/* Arrow */
+.select::after {
+    content: '\25BC';
+    position: absolute;
+    top: -6px;
+    right: 0;
+    padding: 0 10px;
+    background: #313131;
+    cursor: pointer;
+    pointer-events: none;
+    -webkit-transition: .25s all ease;
+    -o-transition: .25s all ease;
+    transition: .25s all ease;
+}
+/* Transition */
+.select:hover::after {
+    color: #f39c12;
+}

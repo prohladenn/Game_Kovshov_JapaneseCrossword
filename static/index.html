@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
+</head>
+<body>
+<header>
+    <div id="logo"></div>
+</header>
+<main>
+    <div class="side">
+        <h3>Меню</h3>
+        <h4>Выберите уровень сложности</h4>
+        <div class="select">
+            <select id="complexity">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+        </div>
+        <h4>Выберете уровень</h4>
+        <div class="select">
+            <select id="level"></select>
+        </div>
+        <h4>Введите ваше имя</h4>
+        <input type="text" placeholder="Ваше имя" id="name">
+        <button id="start">Начать</button>
+        <h3>Настройки</h3>
+        <div class="select">
+            <select id="theme">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+            </select>
+        </div>
+
+    </div>
+    <div id="content">
+        <div id="timer"></div>
+        <div id="app"></div>
+        <button id="check">Проверить</button>
+    </div>
+    <div class="side">
+        <h3>Таблица рекордов</h3>
+        <div id="scoreboard"></div>
+    </div>
+</main>
+
+<script src="../js/levels.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>
