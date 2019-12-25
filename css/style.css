@@ -91,6 +91,10 @@ body.dark #timer {
     color: #b9b9b9;
 }
 
+body.dark #awesome h2 {
+    color: #b9b9b9;
+}
+
 .side {
     min-width: 250px;
     min-height: 200px;

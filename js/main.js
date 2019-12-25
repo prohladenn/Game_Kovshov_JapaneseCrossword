@@ -1,18 +1,19 @@
-const app = document.getElementById("app");
+const complexity = document.getElementById('complexity');
+const scoreboard = document.getElementById('scoreboard');
+const awesome = document.getElementById("awesome");
 const check = document.getElementById("check");
 const timer = document.getElementById("timer");
-const complexity = document.getElementById('complexity');
 const level = document.getElementById('level');
-const scoreboard = document.getElementById('scoreboard');
-const name = document.getElementById('name');
 const theme = document.getElementById('theme');
+const name = document.getElementById('name');
+const app = document.getElementById("app");
 const score = getScoreTable();
 const userData = [];
 let userMatrix = [];
-let currentLevel;
 let currentComplexity;
+let currentLevel;
 let currentName;
-
+let active = false;
 
 complexity.addEventListener('change', (e) => {
     fill(e.target.value)
@@ -29,8 +30,10 @@ document.getElementById('start').addEventListener('click', () => {
 });
 
 check.addEventListener("click", () => {
-    if (checkResult()) {
+    if (checkResult() && active) {
         pushScore();
+        active = false;
+        awesome.style.display = 'block';
         clearTimeout(timer._timer);
     } else {
 
@@ -114,6 +117,7 @@ function init(complexityLevel, level) {
     app.style.display = 'flex';
     check.style.display = 'block';
     buildScoreTable();
+    active = true;
     startTimer();
 }
 
@@ -219,5 +223,6 @@ function checkResult() {
 
 app.style.display = 'none';
 check.style.display = 'none';
+awesome.style.display = 'none';
 fill('easy');
 setTheme(localStorage.getItem('theme'));
