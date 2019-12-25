@@ -116,6 +116,7 @@ function init(complexityLevel, level) {
     app.style.width = `${(currentLevel.column.length + maxRow) * 22 + 4}px`;
     app.style.display = 'flex';
     check.style.display = 'block';
+    awesome.style.display = 'none';
     buildScoreTable();
     active = true;
     startTimer();
