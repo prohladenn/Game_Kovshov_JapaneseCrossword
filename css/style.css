@@ -83,7 +83,7 @@ h4 {
     font-weight: bold;
 }
 
-body.dark #timer, body.dark #awesome h2 {
+body.dark #timer, body.dark h2 {
     color: #b9b9b9;
 }
 
