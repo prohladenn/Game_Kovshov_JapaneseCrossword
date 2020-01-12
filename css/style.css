@@ -16,10 +16,6 @@ main {
     flex-direction: row;
 }
 
-header h1 {
-    margin: 0;
-}
-
 body.dark main {
     background-color: #272727;
 }
@@ -87,11 +83,7 @@ h4 {
     font-weight: bold;
 }
 
-body.dark #timer {
-    color: #b9b9b9;
-}
-
-body.dark #awesome h2 {
+body.dark #timer, body.dark #awesome h2 {
     color: #b9b9b9;
 }
 

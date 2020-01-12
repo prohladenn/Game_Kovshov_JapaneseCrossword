@@ -14,6 +14,8 @@ let currentComplexity;
 let currentLevel;
 let currentName;
 let active = false;
+let constructor = false;
+let customLevelCount = 0;
 
 complexity.addEventListener('change', (e) => {
     fill(e.target.value)
@@ -26,17 +28,40 @@ theme.addEventListener('change', (e) => {
 document.getElementById('start').addEventListener('click', () => {
     if (!name.value)
         return alert('Введите имя');
-    init(complexity.value, level.value)
+    check.innerText = 'Проверить';
+    constructor = false;
+    init(complexity.value, level.value);
+    check.setAttribute('value', 'Сохранить')
+});
+
+document.getElementById('create').addEventListener('click', () => {
+    constructor = true;
+    init('tmp', 0, true);
+    timer.style.display = 'none';
+    check.innerText = 'Сохранить';
 });
 
 check.addEventListener("click", () => {
-    if (checkResult() && active) {
-        pushScore();
-        active = false;
+    if (constructor) {
+        if (matrixContainsOnlyZeros(userData)) {
+            return alert("Нельзя сохранить пустое поле!")
+        }
+        awesome.innerText = 'Ваш уровень сохранён!';
         awesome.style.display = 'block';
-        clearTimeout(timer._timer);
+        app.style.display = 'none';
+        check.style.display = 'none';
+        check.innerText = 'Проверить';
+        constructor = false;
+        saveLevel();
     } else {
+        if (checkResult() && active) {
+            pushScore();
+            active = false;
+            awesome.style.display = 'block';
+            clearTimeout(timer._timer);
+        } else {
 
+        }
     }
 });
 
@@ -78,14 +103,22 @@ function createMatrix(h, w, cell) {
     };
 }
 
-function init(complexityLevel, level) {
+function init(complexityLevel, level, isConstructor) {
     app.innerHTML = '';
     if (timer._timer) clearTimeout(timer._timer);
     currentComplexity = complexityLevel;
     currentLevel = data[complexityLevel][level];
     currentName = name.value;
-    const h = currentLevel.row.length;
-    const w = currentLevel.column.length;
+    let levelRow, levelColumn;
+    if (isConstructor) {
+        levelRow = currentLevel.row;
+        levelColumn = currentLevel.column;
+    } else {
+        levelRow = getRow(currentLevel.answer);
+        levelColumn = getColumn(currentLevel.answer);
+    }
+    const h = levelRow.length;
+    const w = levelColumn.length;
 
     for (let i = 0; i < h; i++) {
         userData[i] = [];
@@ -94,32 +127,35 @@ function init(complexityLevel, level) {
         }
     }
 
-    const maxCol = Math.max(...currentLevel.column.map(c => c.length));
-    const maxRow = Math.max(...currentLevel.row.map(r => r.length));
+    const maxCol = Math.max(...levelColumn.map(c => c.length));
+    const maxRow = Math.max(...levelRow.map(r => r.length));
 
     const a1 = createMatrix(maxCol, maxRow, "empty_cell");
-    const a2 = createMatrix(maxCol, currentLevel.column.length, "cell");
-    for (let j = 0; j < currentLevel.column.length; j++) {
-        for (let i = maxCol - currentLevel.column[j].length, k = 0; i < maxCol; i++, k++) {
-            a2.matrix[i][j].innerText = currentLevel.column[j][k];
+    const a2 = createMatrix(maxCol, w, "cell");
+    for (let j = 0; j < w; j++) {
+        for (let i = maxCol - levelColumn[j].length, k = 0; i < maxCol; i++, k++) {
+            a2.matrix[i][j].innerText = levelColumn[j][k];
         }
     }
     const b1 = createMatrix(h, maxRow, "cell");
     for (let i = 0; i < h; i++) {
-        for (let j = maxRow - currentLevel.row[i].length, k = 0; j < maxRow; j++, k++) {
-            b1.matrix[i][j].innerText = currentLevel.row[i][k];
+        for (let j = maxRow - levelRow[i].length, k = 0; j < maxRow; j++, k++) {
+            b1.matrix[i][j].innerText = levelRow[i][k];
         }
     }
-    const b2 = createMatrix(h, currentLevel.column.length, "game_cell");
+    const b2 = createMatrix(h, w, "game_cell");
     userMatrix = b2.matrix;
     app.append(...[a1, a2, b1, b2].map(e => e.div));
-    app.style.width = `${(currentLevel.column.length + maxRow) * 22 + 4}px`;
+    app.style.width = `${(w + maxRow) * 22 + 4}px`;
     app.style.display = 'flex';
     check.style.display = 'block';
+    timer.style.display = 'block';
     awesome.style.display = 'none';
+    awesome.innerText = 'Вы великолепны, ищите себя в таблице ->';
     buildScoreTable();
     active = true;
-    startTimer();
+    if (!isConstructor)
+        startTimer();
 }
 
 function startTimer() {
@@ -220,6 +256,136 @@ function checkResult() {
         }
     }
     return ans;
+}
+
+function saveLevel() {
+    if (data.myLevels.length == 0) {
+        const opt = document.createElement('option');
+        opt.value = 'myLevels';
+        opt.innerHTML = 'My levels';
+        complexity.appendChild(opt);
+    }
+    const matrix = cutEmptyRowAndColumn(userData.slice());
+    data.myLevels[customLevelCount] =
+        {
+            name: 'level ' + ++customLevelCount,
+            row: getRow(matrix),
+            column: getColumn(matrix),
+            answer: matrix.slice()
+        };
+    fill(complexity.value);
+}
+
+function getRow(matrix) {
+    let ans = [];
+    for (let i = 0; i < matrix.length; i++) {
+        ans.push([]);
+        let tmp = 0;
+        for (let j = 0; j < matrix[0].length; j++) {
+            if (matrix[i][j] === 1) {
+                tmp++;
+            } else {
+                if (tmp !== 0) {
+                    ans[i].push(tmp);
+                }
+                tmp = 0;
+            }
+        }
+        if (tmp !== 0) {
+            ans[i].push(tmp);
+        }
+    }
+    return ans;
+}
+
+function getColumn(matrix) {
+    let ans = [];
+    for (let i = 0; i < matrix[0].length; i++) {
+        ans.push([]);
+        let tmp = 0;
+        for (let j = 0; j < matrix.length; j++) {
+            if (matrix[j][i] === 1) {
+                tmp++;
+            } else {
+                if (tmp !== 0) {
+                    ans[i].push(tmp);
+                }
+                tmp = 0;
+            }
+        }
+        if (tmp !== 0) {
+            ans[i].push(tmp);
+        }
+    }
+    return ans;
+}
+
+function cutEmptyRowAndColumn(matrix) {
+    console.log(matrix);
+    let startEmptyLineCount = 0, endEmptyLineCount = 0;
+    for (let i = 0; i < matrix.length; i++) {
+        if (arrayContainsOnlyZeros(matrix[i])) {
+            startEmptyLineCount++;
+        } else {
+            break;
+        }
+    }
+    for (let i = matrix.length - 1; i >= 0; i--) {
+        if (arrayContainsOnlyZeros(matrix[i])) {
+            endEmptyLineCount++;
+        } else {
+            break;
+        }
+    }
+    console.log(startEmptyLineCount + " " + endEmptyLineCount);
+    let startEmptyRowCount = 0, endEmptyRowCount = 0;
+    for (let i = 0; i < matrix[0].length; i++) {
+        let row = [];
+        for (let j = 0; j < matrix.length; j++) {
+            row.push(matrix[j][i]);
+        }
+        if (arrayContainsOnlyZeros(row)) {
+            startEmptyRowCount++;
+        } else {
+            break;
+        }
+    }
+    for (let i = matrix.length - 1; i >= 0; i--) {
+        let row = [];
+        for (let j = 0; j < matrix.length; j++) {
+            row.push(matrix[j][i]);
+        }
+        if (arrayContainsOnlyZeros(row)) {
+            endEmptyRowCount++;
+        } else {
+            break;
+        }
+    }
+    console.log(startEmptyRowCount + " " + endEmptyRowCount);
+    let newMatrix = [];
+    for (let i = startEmptyLineCount; i < matrix.length - endEmptyLineCount; i++) {
+        newMatrix.push([]);
+        for (let j = startEmptyRowCount; j < matrix[0].length - endEmptyRowCount; j++) {
+            newMatrix[i - startEmptyLineCount][j - startEmptyRowCount] = matrix[i][j];
+        }
+    }
+    return newMatrix;
+}
+
+function matrixContainsOnlyZeros(matrix) {
+    let ans = true;
+    for (let i = 0; i < matrix.length; i++) {
+        ans = ans && arrayContainsOnlyZeros(matrix[i]);
+    }
+    return ans;
+}
+
+function arrayContainsOnlyZeros(array) {
+    for (let i = 0; i < array.length; i++) {
+        if (array[i] !== 0)
+            return false;
+    }
+    return true;
 }
 
 app.style.display = 'none';
